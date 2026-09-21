@@ -4,7 +4,7 @@ MBAX 6418 · Reproducible, offline evaluation of text-only model predictions aga
 
 > **Submission review:** This report was drafted with an AI agent from the saved CSV files. I will check the figures and put the conclusions in my own words before submitting it.
 
-<!-- Insert the dashboard screenshot here after capture. -->
+![Balanced three-class dashboard showing 76.00% accuracy across 150 reviews and the class-distribution charts](dashboard/screenshot.png)
 
 Open the [interactive dashboard](dashboard/index.html) by downloading the repository and opening `dashboard/index.html` in a browser. It is a self-contained HTML file with all 150 balanced-run reviews embedded; no server or network connection is needed.
 

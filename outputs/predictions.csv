@@ -1,0 +1,101 @@
+row_id,title,text,rating,actual_sentiment,predicted_sentiment,correct,verified_purchase,helpful_vote
+1,Great gift,Having Amazon money is always good.,5.0,POSITIVE,POSITIVE,True,True,0
+2,amazon gift card,Always the perfect gift.  I have never given one and had someone seem or act disappointed.  Just the opposite.  They are thrilled and excited to have a bit of a spree.  Always the perfect size and color!  Arrives in 1 day in most cases.  So it's never too late!  Lots of cards to chose from... thank you... birthday... wedding..baby..  and many that work for many occasions...,5.0,POSITIVE,POSITIVE,True,False,0
+3,perfect gift,When you have a person who is hard to shop for.. an amazon gift card is P E R F E C T.  Man or woman...  No matter what their hobby... lifestyle.. or age.  All you have to do is pick the $.  Don't forget to mention that it is a GIFT when you check out - you will have some gift card options.  I've ordered many of these over years.  They are always received with glee.  Woo hoo!  If you're looking for a great fit for me - this is just my size!  :)  Best to all!,5.0,POSITIVE,POSITIVE,True,True,27
+4,Nice looking,"The tin is a nice touch and pretty large.  It's about 4&#34; in diameter and about 1/2&#34; thick.  I added a pretty red ribbon and it is perfect.  Who doesn't love shopping on Amazon? Arrived quickly, I have Prime... but I think they ship the gift cards out SUPER fast... like over night. In case you need it for a FAST gift.",5.0,POSITIVE,POSITIVE,True,False,0
+5,Not $10 Gift Cards,"I bought this pack of Starbucks Gift cards in 2019. Ive given them to friends and I gave 2 to my daughter.<br />My daughter used one recently and it had $6.52 on the card not $10.00. She had the cashier check the balance of the other card and it had $5.32 on it! She had forgotten that she had these gift cards, so yes, 2 years later decided to use the when she found them! Do they decline in value? And then both had random amounts on them! I'm embarrassed now to have given them as gifts! Friends receiving the gift card aren't going to tell you that weren't able to cover their order with the card you gave them!!!",1.0,NEGATIVE,NEGATIVE,True,True,2
+6,Cute!,That snowman tin is adorable,5.0,POSITIVE,POSITIVE,True,True,0
+7,Easy gift,Great and easy gift,5.0,POSITIVE,POSITIVE,True,True,0
+8,Great gift,Super cute nice quality tin<br />Your choose amount,5.0,POSITIVE,POSITIVE,True,True,0
+9,Gifts for my two granddaughters,They love it !!,5.0,POSITIVE,POSITIVE,True,True,0
+10,"Great for saying “thank you” to the mail person, farrier, yard man,etc",So many people<br />Make your life better so remember them!,5.0,POSITIVE,POSITIVE,True,True,0
+11,"Convenient, safe, and perfect gift","My grandson inlaw loves his gift cards, so it's the perfect gift for Christmas",5.0,POSITIVE,POSITIVE,True,True,2
+12,Giftcard,"What can you say about a gift card? Well, it was valid. It's a good gift for someone who doesn't like to cook. Arrived promptly.",5.0,POSITIVE,POSITIVE,True,True,1
+13,Simple giftcard!,Easy way to gift money for birthdays.,5.0,POSITIVE,POSITIVE,True,True,0
+14,Great giftcard,Great gift for online shoppers!,5.0,POSITIVE,POSITIVE,True,True,0
+15,Easy..,Reloading is easy. Shopping is easy. Amazon is easy.,5.0,POSITIVE,POSITIVE,True,True,0
+16,One Star,Card did not work!!!!,1.0,NEGATIVE,NEGATIVE,True,False,0
+17,Great Product.,I bought this for a Christmas gift.The recipient really liked it.,5.0,POSITIVE,POSITIVE,True,True,0
+18,No note attached to sent gift card,"What a pretty gift card presentation , the recipient loved it ! I have one complaint , I took the time and wrote a short note to the recipient of the gift card so she knew who and why the GC was being sent but the note wasn’t attached. I’ve used the option to write a note on many occasions and several times it showed up without the note . I actually had to contact her to ask if she had checked her mail knowing it had arrived .",5.0,POSITIVE,NEGATIVE,False,False,0
+19,Gift card,Perfect! Arrived just when stated!,5.0,POSITIVE,POSITIVE,True,True,0
+20,Good,Good gift card,5.0,POSITIVE,POSITIVE,True,False,0
+21,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,False,0
+22,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,True,0
+23,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,False,0
+24,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,False,0
+25,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,True,0
+26,Good product,Good product,5.0,POSITIVE,POSITIVE,True,True,0
+27,Good product,Good product,5.0,POSITIVE,POSITIVE,True,True,0
+28,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,True,0
+29,Good Product,Good Product,5.0,POSITIVE,POSITIVE,True,True,0
+30,Good,Good,5.0,POSITIVE,POSITIVE,True,True,0
+31,Gift card,Perfect for Christmas,5.0,POSITIVE,POSITIVE,True,True,0
+32,So easy,Easy to do,5.0,POSITIVE,POSITIVE,True,True,0
+33,Mistake,Hit button by mistake n deduction from credit card on file,2.0,NEGATIVE,NEGATIVE,True,True,0
+34,Great gift idea,Always great to order from my home. Amazon rocks!,5.0,POSITIVE,POSITIVE,True,True,0
+35,Secure,So easy to use and recipients get to choose how to use it.,5.0,POSITIVE,POSITIVE,True,True,0
+36,Birthday surprise!,This was a good birthday surprise!,5.0,POSITIVE,POSITIVE,True,True,0
+37,Birthday Gift,"Have given as Holiday, Birthday & Other Occasions remembrances. Always appreciated by the person receiving.",5.0,POSITIVE,POSITIVE,True,True,0
+38,Fun,Awesome & they work,5.0,POSITIVE,POSITIVE,True,True,0
+39,Reload is super easy.,Really ready to reload gift cards.,5.0,POSITIVE,POSITIVE,True,True,1
+40,Convenience of giftabiliy.,A great way to give a gift to family members in physical form. It was so convenient.,5.0,POSITIVE,POSITIVE,True,True,0
+41,Great Gift Package,Nice gift packaging for any event,5.0,POSITIVE,POSITIVE,True,True,0
+42,Grest Sandwitches !!,Perfect and I even used Amazon Points - was mailed right out.,5.0,POSITIVE,POSITIVE,True,True,0
+43,GOOD PIZZA !!,Perfect and I even used Amazon Points - was mailed right out.,5.0,POSITIVE,POSITIVE,True,True,1
+44,We like this Store and they stock Tons of different Items for all kinds of Pets,Our cats love this place.,5.0,POSITIVE,POSITIVE,True,True,0
+45,Money was loaded on card,Was cute and the money was loaded when it arrived,5.0,POSITIVE,POSITIVE,True,True,0
+46,👍,👍,5.0,POSITIVE,POSITIVE,True,True,0
+47,Love it!!,This is an online gift card nothing to show sorry🤪,5.0,POSITIVE,POSITIVE,True,True,0
+48,Five Stars,Gift cards are always a hit.,5.0,POSITIVE,POSITIVE,True,True,0
+49,So cool you can get a free tin with the gift ...,So cool you can get a free tin with the gift card and it comes in 24 hours!! Super awesome. Last year I just printed off the gift cards which looked kind of cheap even though the cards were for substantial amounts. Highly recommend.,5.0,POSITIVE,POSITIVE,True,True,0
+50,Reccomend,Really easy to load,5.0,POSITIVE,POSITIVE,True,True,0
+51,Little sister surprise,"Same gift as her big sister's, this little one can choose the exact thing she most desires and run to the door for three days in anticipation.  A combined birthday and Christmas present for one who knows her own mind.  Good choice!",5.0,POSITIVE,POSITIVE,True,True,0
+52,"The added value was great, but no more",Purchasing an Amazon gift card came with an added monetary value but no more.<br /><br />A Bronx cheer for you!,1.0,NEGATIVE,NEGATIVE,True,True,0
+53,Perfect gift!,This is near where I work and has a drive through.  Nothing better during these times to give than a gift of good food they can pick up with minimal contact. Gift cards are the way to go these days!,4.0,POSITIVE,POSITIVE,True,True,0
+54,Great staff appreciation gift!,What better gift during these times than one to treat yourself.  This is a great gift I gave out to my staff and even those who don't read liked the idea of being able to listen to the audiobooks as well as there being content and other media through Audible.,4.0,POSITIVE,POSITIVE,True,True,0
+55,Cute cute cute!,I love the tin! The gift cards can be ordered on different amounts.,5.0,POSITIVE,POSITIVE,True,True,0
+56,Five Stars,Simple and easy.,5.0,POSITIVE,POSITIVE,True,True,0
+57,As described.,Being able to reload the gift card is a time saver.,5.0,POSITIVE,POSITIVE,True,True,0
+58,Perfect gift for any occasion. Let them pick out what they love!,"I mean really, who wouldn't LOVE this?!?  Wonderful gift for any occasion.",5.0,POSITIVE,POSITIVE,True,True,0
+59,12 year old daughter loved this gift!,Perfect gift for your kids!,5.0,POSITIVE,POSITIVE,True,True,0
+60,Easy to send to an Amazon shopper,This is a simple gift to friends or family. For me it was easy to setup. Took ok only about 30 seconds. I also redeem Visa gifts by giving the gift card to myself. I like there isnt a fee. I do want Amazon to make some cooler cards with my animation when a receiver gets it.,5.0,POSITIVE,POSITIVE,True,True,1
+61,Rec'd promo from Amazon when reloading gift card.,"Bonus, rec'd a promo from Amazon for reloading gift card.  Yeah.<br /><br />Gift card was posted to my account quickly.",5.0,POSITIVE,POSITIVE,True,True,0
+62,Saves a Little Over time.,Nice way to save a few bucks overtime by reloading your own gift card.,5.0,POSITIVE,POSITIVE,True,True,0
+63,What a great company,"Who wouldn't want an Amazon gift card?  The box foretold the contents, lol.",5.0,POSITIVE,POSITIVE,True,True,0
+64,A problem to use at drive thru's,"I only used the $50 card one time at Burger King. It was difficult to use. Must be run as credit, not as gift card. No remaining balance is given at the end of the transaction. And although it's on me, I misplaced or lost this card after only spending about $6 of it. I was hoping that the seller could provide me with the full card number so that I could at least use it online for other purchases. They failed to respond. I have the receipt from BK, but it only shows the last 4 numbers. There isn't a way of contacting happy cards customer service online that I could figure out. I wish I'd just stuck with credit cards. A lot safer.",1.0,NEGATIVE,NEGATIVE,True,True,4
+65,A gift card does make a great gift for a tweenager.,"We all know the kid who wants nothing. Or actually wants everything but nothing is good enough. YES,YES,the secret weapon. A AMAZON GIFT CARD!!  You pulled it off. You showed your love and you are the best and greatest. Happy Birthday to just because,You are the BEST!!",5.0,POSITIVE,POSITIVE,True,True,0
+66,Nice to have,"This comes in  very handy, and makes the guilt less",5.0,POSITIVE,POSITIVE,True,True,0
+67,Excellent Gift,"Who would not like an Amazon Gift Card?  Makes everyone I give them, happy!",5.0,POSITIVE,POSITIVE,True,True,0
+68,Yay so easy!,So easy! No scraping!,5.0,POSITIVE,POSITIVE,True,True,1
+69,:),easy to use,5.0,POSITIVE,POSITIVE,True,True,0
+70,10/10,works great,5.0,POSITIVE,POSITIVE,True,True,0
+71,Perfect for a birthday 🎂,Another nice gift box from Amazon. With the world the way it is now I had to send a gift rather than going to a party. And Amazon has a good selection of gift boxes and fast shipping so my nephew was happy when he received the card in the mail.,5.0,POSITIVE,POSITIVE,True,False,1
+72,Perfect!,Bought this for a gift and was very happy it shipped quickly and they received it just in time! Amazon is awesome! 🤩,5.0,POSITIVE,POSITIVE,True,False,0
+73,Gift box nice!,Love the gift box. So much j NB icee than just handing a gift card to the grandkids.,5.0,POSITIVE,POSITIVE,True,True,0
+74,It was soooo easy,It was a nice way to give a present,5.0,POSITIVE,POSITIVE,True,True,0
+75,great,great buy,5.0,POSITIVE,POSITIVE,True,True,0
+76,Amazon Thinks of Everything!,GREAT idea!  I was so happy to have these on hand for the Holidays!,5.0,POSITIVE,POSITIVE,True,True,0
+77,Amazon lover giftee?  Buy it!,So gift card for certain sum.  No service fee.  Lively metal gift box - yes..... I said metal.  What is not to love about this???!<br /><br />Well done Amazon.  Well done.,5.0,POSITIVE,POSITIVE,True,True,8
+78,Timing,Great timing.,5.0,POSITIVE,POSITIVE,True,True,0
+79,Was easy to do,Easy to use,5.0,POSITIVE,POSITIVE,True,True,0
+80,PENGUINS,So so cute!,5.0,POSITIVE,POSITIVE,True,True,0
+81,Believe this is the best gift to give !,The recipient can choose what they want so the giver has less chance of a mistake.,5.0,POSITIVE,POSITIVE,True,True,0
+82,convenient,A great and convenient gift idea-price is right too!,5.0,POSITIVE,POSITIVE,True,False,0
+83,Five Stars,The gift card came in a pretty box.<br />Thanks Amozan.,5.0,POSITIVE,POSITIVE,True,True,0
+84,Best gift for someone you don’t know what to get,This was for a gift,5.0,POSITIVE,POSITIVE,True,True,0
+85,Great value,Made my shopping much better good value,5.0,POSITIVE,POSITIVE,True,True,0
+86,Sweet gift!,I sent this to my brother and he couldn't stop talking about it. This boxes puts a little more nice into a gift. Very pretty!,5.0,POSITIVE,POSITIVE,True,True,0
+87,Amazing,It can be used for a variety of things.,5.0,POSITIVE,POSITIVE,True,True,1
+88,Great Holder,Great holder for gift cards,5.0,POSITIVE,POSITIVE,True,True,0
+89,Gift card,Makes these so easy for any holiday and especially stops buying something people do not like,5.0,POSITIVE,POSITIVE,True,True,0
+90,Starbuck gift card,My friend like the gift card like the sweater for holiday card,5.0,POSITIVE,POSITIVE,True,True,0
+91,Good litte thank-you gifts,"I'm happy they did not cost me more than their face value to buy. I gave them out as a nice thank you to those who helped me with small things around my house. I sent them in the mail as a surprise, knowing money or gifts was not necessary. I recommend them.",5.0,POSITIVE,POSITIVE,True,True,0
+92,Okay as a gift,"After I bought several I realized I could have sent ""gift"" money via text without the fees or wait.",3.0,NEGATIVE,NEGATIVE,True,True,0
+93,Good gift,"Those who already have everything, they can buy an audible book, an old rerun of a favorite movie, some little thing they may want, or whatever as a gift for any occasion. I recommend.",5.0,POSITIVE,POSITIVE,True,True,0
+94,So convenient.,"Arrived on time, in perfect shape, and best of all the person receiving the gift can buy whatever they want. One size fits all!",5.0,POSITIVE,POSITIVE,True,True,0
+95,Just what was ordered.,Made holiday shopping easy!,5.0,POSITIVE,POSITIVE,True,True,0
+96,Can Do It From Home,Usually I either receive an Amazon gift card as a birthday and/or Christmas gift or I purchase them at a store. Then it's very easy to add the amount to my gift card balance using my cell phone. Well I was stuck inside for several days due to a blizzard and I bought quite a few books then due to a travel ban I could not go to the store to purchase a gift card.<br />So after checking my Gift Card Balance I saw that I had overindulged and it needed to be topped up. One of the options under Manage Your Balance was to Reload Your Balance. I had never used this option but decided to try it. It was so easy to do and I didn't have to leave the comfort of my home. I will be using it again in the future.,5.0,POSITIVE,POSITIVE,True,True,17
+97,Love it!,Love my card!!,5.0,POSITIVE,POSITIVE,True,True,0
+98,Easy to use,It’s easy to use and very convenient. I would definitely consider refill more in the future,5.0,POSITIVE,POSITIVE,True,True,0
+99,Easy to use,Very easy to use. I wish I knew about it earlier,3.0,NEGATIVE,POSITIVE,False,True,0
+100,Perfect gift sent I a lovely container,Sent in a lovely container,5.0,POSITIVE,POSITIVE,True,True,0

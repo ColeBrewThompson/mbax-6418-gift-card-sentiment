@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MBAX 6418 sentiment-classification evaluation dashboard for 100 Amazon Gift Card reviews.">
+  <title>Sentiment Evaluation · MBAX 6418</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d2546'/%3E%3Cpath d='M17 43V29h8v14zm11 0V20h8v23zm11 0V12h8v31z' fill='%2320a58f'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      /* Theme controls */
+      --canvas: #f3f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f8fafb;
+      --ink: #102033;
+      --ink-soft: #526173;
+      --navy: #0d2546;
+      --positive: #137a6b;
+      --positive-soft: #e4f3ef;
+      --negative: #b33c4a;
+      --negative-soft: #fbeaec;
+      --caution: #b56c16;
+      --caution-soft: #fff3df;
+      --line: #dbe2e8;
+      --shadow: 0 12px 32px rgba(20, 38, 58, .07);
+      --radius: 16px;
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    a { color: inherit; }
+    .skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 20; padding: .7rem 1rem; background: white; border-radius: 8px; }
+    .skip-link:focus { top: 1rem; }
+    .site-header {
+      background: var(--navy);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::after {
+      content: "";
+      position: absolute;
+      width: 30rem;
+      height: 30rem;
+      right: -10rem;
+      top: -17rem;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      box-shadow: 0 0 0 5rem rgba(255,255,255,.025), 0 0 0 10rem rgba(255,255,255,.02);
+    }
+    .header-inner, main, .footer-inner { width: min(calc(100% - 2.5rem), var(--max-width)); margin-inline: auto; }
+    .header-inner { position: relative; z-index: 1; padding: 3.25rem 0 3rem; }
+    .eyebrow { margin: 0 0 .65rem; color: #8fd6ca; font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; max-width: 770px; font-size: clamp(2.3rem, 5vw, 4.5rem); line-height: 1.02; letter-spacing: -.055em; }
+    .subtitle { margin: 1rem 0 0; color: #c9d6e4; font-size: 1.08rem; }
+    .section-nav { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin-top: 2rem; }
+    .section-nav a { color: #dce6ef; font-size: .88rem; text-decoration: none; border-bottom: 1px solid transparent; }
+    .section-nav a:hover, .section-nav a:focus-visible { border-color: #8fd6ca; color: white; }
+    main { padding: 2.25rem 0 5rem; }
+    .overview-grid { display: grid; grid-template-columns: 1.35fr repeat(4, 1fr); gap: 1rem; margin-top: -4rem; position: relative; z-index: 2; }
+    .metric-card { min-height: 142px; padding: 1.35rem; background: var(--surface); border: 1px solid rgba(219,226,232,.85); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .metric-card--lead { background: var(--positive); color: white; }
+    .metric-label { display: block; color: var(--ink-soft); font-size: .82rem; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+    .metric-card--lead .metric-label { color: #d7f2ec; }
+    .metric-value { display: block; margin-top: .35rem; font-size: clamp(2rem, 3.8vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+    .metric-note { display: block; margin-top: .75rem; color: var(--ink-soft); font-size: .82rem; line-height: 1.35; }
+    .metric-card--lead .metric-note { color: #e1f6f1; }
+    section { scroll-margin-top: 1rem; margin-top: 4.5rem; }
+    .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 480px); gap: 2rem; align-items: end; margin-bottom: 1.5rem; }
+    .section-index { display: block; margin-bottom: .35rem; color: var(--positive); font-size: .78rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.1; letter-spacing: -.035em; }
+    .section-heading p { margin: 0; color: var(--ink-soft); }
+    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.6rem; }
+    .panel h3 { margin: 0 0 .3rem; font-size: 1rem; }
+    .panel-intro { margin: 0 0 1.5rem; color: var(--ink-soft); font-size: .9rem; }
+    .balance-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .balance-number { padding: 1rem; border-radius: 12px; background: var(--surface-soft); }
+    .balance-number span { display: block; color: var(--ink-soft); font-size: .82rem; }
+    .balance-number strong { display: block; margin-top: .15rem; font-size: 2rem; letter-spacing: -.04em; }
+    .balance-number--negative strong { color: var(--negative); }
+    .stacked-bar { display: flex; height: 28px; overflow: hidden; border-radius: 7px; background: var(--line); }
+    .stacked-bar span { display: grid; place-items: center; color: white; font-size: .72rem; font-weight: 800; }
+    .stacked-positive { width: 93%; background: var(--positive); }
+    .stacked-negative { width: 7%; min-width: 42px; background: var(--negative); }
+    .imbalance-note { display: flex; gap: .75rem; align-items: flex-start; margin: 1.25rem 0 0; padding: 1rem; border-left: 4px solid var(--caution); background: var(--caution-soft); color: #70430d; font-size: .9rem; }
+    .recall-list { display: grid; gap: 1.5rem; margin-top: 1.5rem; }
+    .recall-top { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .55rem; }
+    .recall-top span { font-weight: 700; }
+    .recall-top strong { font-variant-numeric: tabular-nums; }
+    .progress { height: 12px; overflow: hidden; border-radius: 999px; background: #e9eef1; }
+    .progress i { display: block; height: 100%; border-radius: inherit; background: var(--positive); }
+    .progress--negative i { background: var(--negative); }
+    .recall-detail { margin: .5rem 0 0; color: var(--ink-soft); font-size: .82rem; }
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { width: 100%; max-width: 650px; margin: 0 auto; border-collapse: separate; border-spacing: .65rem; table-layout: fixed; }
+    .matrix caption { text-align: left; padding: 0 .65rem 1rem; color: var(--ink-soft); }
+    .matrix th { color: var(--ink-soft); font-size: .82rem; }
+    .matrix td { height: 135px; padding: 1rem; text-align: center; border-radius: 12px; }
+    .matrix td strong { display: block; font-size: 2.4rem; line-height: 1; }
+    .matrix td span { display: block; margin-top: .5rem; font-size: .82rem; }
+    .matrix-correct { color: #075b4f; background: var(--positive-soft); border: 1px solid #abd8cf; }
+    .matrix-error { color: #8e2734; background: var(--negative-soft); border: 1px solid #efbec4; }
+    .axis-label { color: var(--ink); font-weight: 800; }
+    .rating-panel { padding: .75rem 1.2rem 1.2rem; overflow-x: auto; }
+    .rating-table { width: 100%; min-width: 700px; border-collapse: collapse; }
+    .rating-table th, .rating-table td { padding: 1rem .85rem; text-align: left; border-bottom: 1px solid var(--line); }
+    .rating-table thead th { color: var(--ink-soft); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; }
+    .rating-table tbody tr:last-child th, .rating-table tbody tr:last-child td { border-bottom: 0; }
+    .rating-row--highlight { background: var(--caution-soft); }
+    .stars { color: #d58d2c; letter-spacing: .05em; white-space: nowrap; }
+    .stars span { color: #d8dee4; }
+    .count-cell, .accuracy-cell { display: grid; grid-template-columns: 56px minmax(100px, 1fr); align-items: center; gap: .75rem; }
+    .mini-bar { display: block; height: 8px; overflow: hidden; border-radius: 999px; background: #e9eef1; }
+    .mini-bar i { display: block; height: 100%; border-radius: inherit; background: #7890a5; }
+    .mini-bar--accuracy i { background: var(--positive); }
+    .error-count { display: inline-grid; min-width: 2rem; height: 2rem; place-items: center; border-radius: 8px; background: var(--surface-soft); font-weight: 800; }
+    .error-count.has-error { color: var(--negative); background: var(--negative-soft); }
+    .rating-footnote { margin: 1rem .85rem .25rem; color: var(--ink-soft); font-size: .88rem; }
+    .error-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; overflow: hidden; margin-bottom: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--line); }
+    .error-summary > div { padding: 1.1rem 1.25rem; background: var(--surface); }
+    .error-summary span { display: block; color: var(--ink-soft); font-size: .8rem; }
+    .error-summary strong { display: block; margin-top: .15rem; font-size: 1.3rem; }
+    .error-stack { display: grid; gap: 1.25rem; }
+    .error-card { padding: 1.7rem; background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--negative); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .error-card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .row-number { color: var(--negative); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .error-card h3 { margin: .2rem 0 0; font-size: 1.25rem; }
+    .error-type { flex: none; padding: .35rem .65rem; color: #793a0a; background: var(--caution-soft); border-radius: 999px; font-size: .78rem; font-weight: 750; }
+    blockquote { margin: 1.25rem 0; padding: 1rem 1.15rem; background: var(--surface-soft); border-radius: 10px; color: #34475b; font-size: .94rem; }
+    .label-comparison { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+    .label-comparison > div { padding: .8rem; border: 1px solid var(--line); border-radius: 10px; }
+    .label-comparison span { display: block; margin-bottom: .35rem; color: var(--ink-soft); font-size: .75rem; }
+    .pill { display: inline-flex; align-items: center; min-height: 27px; padding: .25rem .55rem; border-radius: 999px; font-size: .76rem; letter-spacing: .025em; }
+    .pill--positive { color: #075b4f; background: var(--positive-soft); }
+    .pill--negative { color: #8e2734; background: var(--negative-soft); }
+    .pill--correct { color: #075b4f; background: var(--positive-soft); }
+    .pill--incorrect { color: #8e2734; background: var(--negative-soft); }
+    .error-explanation { margin: 1.1rem 0 0; color: var(--ink-soft); }
+    .explorer-shell { overflow: hidden; padding: 0; }
+    .filters { display: grid; grid-template-columns: minmax(220px, 2fr) repeat(4, 1fr) auto; gap: .75rem; align-items: end; padding: 1.25rem; background: var(--surface-soft); border-bottom: 1px solid var(--line); }
+    .control label { display: block; margin-bottom: .35rem; color: var(--ink-soft); font-size: .76rem; font-weight: 750; }
+    .control input, .control select { width: 100%; height: 42px; padding: 0 .75rem; color: var(--ink); background: white; border: 1px solid #bdc8d1; border-radius: 8px; }
+    .control input:focus, .control select:focus, button:focus-visible, summary:focus-visible { outline: 3px solid rgba(19,122,107,.25); outline-offset: 2px; border-color: var(--positive); }
+    .clear-button { height: 42px; padding: 0 .9rem; border: 1px solid #bdc8d1; border-radius: 8px; background: white; color: var(--ink); cursor: pointer; }
+    .clear-button:hover { background: #edf2f5; }
+    .table-status { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1.25rem; color: var(--ink-soft); font-size: .85rem; border-bottom: 1px solid var(--line); }
+    .table-status strong { color: var(--ink); }
+    .table-scroll { max-height: 680px; overflow: auto; }
+    .review-table { width: 100%; min-width: 940px; border-collapse: collapse; }
+    .review-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .review-table th, .review-table td { padding: .8rem .9rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    .review-table thead th { position: sticky; top: 0; z-index: 2; background: #edf2f5; color: #425366; font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; }
+    .review-table tbody tr:hover { background: #f8fbfc; }
+    .review-table tbody tr.is-error { background: #fff7f8; }
+    .review-table .numeric { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .review-title { max-width: 180px; font-weight: 700; }
+    .review-text { min-width: 260px; max-width: 420px; }
+    details summary { color: #405369; cursor: pointer; }
+    details[open] summary { margin-bottom: .65rem; }
+    details p { margin: 0; padding: .75rem; background: var(--surface-soft); border-radius: 8px; color: var(--ink); white-space: pre-line; }
+    .empty-row td { padding: 2.5rem; text-align: center; color: var(--ink-soft); }
+    .takeaways { display: grid; grid-template-columns: .8fr 1.4fr; gap: 1.25rem; }
+    .takeaway-score { display: grid; align-content: space-between; min-height: 290px; color: white; background: var(--navy); }
+    .takeaway-score .metric-label { color: #b8c8d8; }
+    .takeaway-score strong { display: block; font-size: 4.5rem; line-height: 1; letter-spacing: -.06em; }
+    .takeaway-score p { margin: 1rem 0 0; color: #cbd7e3; }
+    .takeaway-list { margin: 0; padding: 0; list-style: none; }
+    .takeaway-list li { position: relative; padding: 1rem 0 1rem 2rem; border-bottom: 1px solid var(--line); }
+    .takeaway-list li:first-child { padding-top: .2rem; }
+    .takeaway-list li:last-child { border-bottom: 0; padding-bottom: .2rem; }
+    .takeaway-list li::before { content: ""; position: absolute; left: 0; top: 1.45rem; width: 9px; height: 9px; border-radius: 2px; background: var(--positive); }
+    .takeaway-list li:first-child::before { top: .65rem; }
+    footer { padding: 1.5rem 0; color: #647386; border-top: 1px solid var(--line); font-size: .82rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 1rem; }
+
+    @media (max-width: 980px) {
+      .overview-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-card--lead { grid-column: 1 / -1; }
+      .filters { grid-template-columns: repeat(2, 1fr); }
+      .control--search { grid-column: 1 / -1; }
+    }
+    @media (max-width: 720px) {
+      .header-inner, main, .footer-inner { width: min(calc(100% - 1.4rem), var(--max-width)); }
+      .header-inner { padding-top: 2.3rem; }
+      .overview-grid, .analysis-grid, .section-heading, .takeaways { grid-template-columns: 1fr; }
+      .overview-grid { margin-top: -2rem; }
+      .metric-card--lead { grid-column: auto; }
+      section { margin-top: 3.5rem; }
+      .section-heading { gap: .75rem; }
+      .error-summary, .label-comparison { grid-template-columns: 1fr; }
+      .error-card__top { display: grid; }
+      .filters { grid-template-columns: 1fr; }
+      .control--search { grid-column: auto; }
+      .table-status, .footer-inner { display: grid; }
+    }
+    @media print {
+      :root { --canvas: white; --shadow: none; }
+      .section-nav, .filters, .clear-button { display: none; }
+      .site-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .overview-grid { margin-top: 1rem; }
+      .panel, .metric-card, .error-card { break-inside: avoid; }
+      .table-scroll { max-height: none; overflow: visible; }
+      .review-table thead th { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow">MBAX 6418 · Step 3</p>
+      <h1>Sentiment evaluation</h1>
+      <p class="subtitle">LLM sentiment predictions compared with rating-derived labels.</p>
+      <nav class="section-nav" aria-label="Dashboard sections">
+        <a href="#performance">Performance</a>
+        <a href="#ratings">Star ratings</a>
+        <a href="#errors">Error analysis</a>
+        <a href="#explorer">Review explorer</a>
+        <a href="#takeaways">Takeaways</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="overview-grid" aria-label="Evaluation overview">
+      <article class="metric-card metric-card--lead"><span class="metric-label">Overall accuracy</span><strong class="metric-value">98.00%</strong><span class="metric-note">98 of 100 predictions matched the rating-derived label.</span></article>
+      <article class="metric-card"><span class="metric-label">Reviews</span><strong class="metric-value">100</strong><span class="metric-note">First 100 dataset rows</span></article>
+      <article class="metric-card"><span class="metric-label">Correct</span><strong class="metric-value">98</strong><span class="metric-note">Matching predictions</span></article>
+      <article class="metric-card"><span class="metric-label">Incorrect</span><strong class="metric-value">2</strong><span class="metric-note">Reviewed in detail below</span></article>
+      <article class="metric-card"><span class="metric-label">Balanced accuracy</span><strong class="metric-value">92.32%</strong><span class="metric-note">Average recall across both classes</span></article>
+    </section>
+
+    <section id="performance">
+      <div class="section-heading">
+        <div><span class="section-index">01 · Performance</span><h2>Strong results, viewed in context</h2></div>
+        <p>Raw accuracy is excellent. Class balance and class-specific recall reveal the smaller negative class more clearly.</p>
+      </div>
+      <div class="analysis-grid">
+        <article class="panel">
+          <h3>Class balance</h3>
+          <p class="panel-intro">Actual sentiment derived from star ratings.</p>
+          <div class="balance-numbers">
+            <div class="balance-number"><span>Actual POSITIVE</span><strong>93</strong></div>
+            <div class="balance-number balance-number--negative"><span>Actual NEGATIVE</span><strong>7</strong></div>
+          </div>
+          <div class="stacked-bar" role="img" aria-label="Class balance: 93 positive reviews and 7 negative reviews">
+            <span class="stacked-positive">93%</span><span class="stacked-negative">7%</span>
+          </div>
+          <p class="imbalance-note"><strong>Why this matters:</strong> With 93% of reviews in one class, raw accuracy can be dominated by positive reviews. Balanced accuracy gives each class equal weight.</p>
+        </article>
+        <article class="panel">
+          <h3>Class performance</h3>
+          <p class="panel-intro">Recall measures how many reviews in each actual class were identified correctly.</p>
+          <div class="recall-list">
+            <div><div class="recall-top"><span>POSITIVE recall</span><strong>98.92%</strong></div><div class="progress" role="progressbar" aria-label="Positive recall" aria-valuemin="0" aria-valuemax="100" aria-valuenow="98.92"><i style="width:98.92%"></i></div><p class="recall-detail">92 of 93 actual positive reviews</p></div>
+            <div><div class="recall-top"><span>NEGATIVE recall</span><strong>85.71%</strong></div><div class="progress progress--negative" role="progressbar" aria-label="Negative recall" aria-valuemin="0" aria-valuemax="100" aria-valuenow="85.71"><i style="width:85.71%"></i></div><p class="recall-detail">6 of 7 actual negative reviews</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <div class="section-heading">
+        <div><span class="section-index">02 · Confusion matrix</span><h2>Where predictions landed</h2></div>
+        <p>Green cells are correct classifications. Red cells are the two disagreements.</p>
+      </div>
+      <article class="panel matrix-wrap">
+        <table class="matrix">
+          <caption>Rows show rating-derived actual sentiment; columns show model predictions.</caption>
+          <thead><tr><th></th><th colspan="2" class="axis-label">Predicted sentiment</th></tr><tr><th></th><th>POSITIVE</th><th>NEGATIVE</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Actual POSITIVE</th><td class="matrix-correct"><strong>92</strong><span>True positives</span></td><td class="matrix-error"><strong>1</strong><span>False negatives</span></td></tr>
+            <tr><th scope="row">Actual NEGATIVE</th><td class="matrix-error"><strong>1</strong><span>False positives</span></td><td class="matrix-correct"><strong>6</strong><span>True negatives</span></td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <section id="ratings">
+      <div class="section-heading">
+        <div><span class="section-index">03 · Star ratings</span><h2>Performance by rating</h2></div>
+        <p>The sample is concentrated at 5 stars. The only 3-star error exposes a disagreement between positive wording and the assignment’s label rule.</p>
+      </div>
+      <article class="panel rating-panel">
+        <table class="rating-table">
+          <thead><tr><th>Rating</th><th>Reviews</th><th>Accuracy</th><th>Errors</th></tr></thead>
+          <tbody><tr class="rating-row">
+          <th scope="row"><span class="stars" aria-label="1 stars">★<span>★★★★</span></span></th>
+          <td><div class="count-cell"><strong>4</strong><span class="mini-bar"><i style="width:4.00%"></i></span></div></td>
+          <td><div class="accuracy-cell"><strong>100.00%</strong><span class="mini-bar mini-bar--accuracy"><i style="width:100.00%"></i></span></div></td>
+          <td><span class="error-count">0</span></td>
+        </tr>
+<tr class="rating-row">
+          <th scope="row"><span class="stars" aria-label="2 stars">★★<span>★★★</span></span></th>
+          <td><div class="count-cell"><strong>1</strong><span class="mini-bar"><i style="width:1.00%"></i></span></div></td>
+          <td><div class="accuracy-cell"><strong>100.00%</strong><span class="mini-bar mini-bar--accuracy"><i style="width:100.00%"></i></span></div></td>
+          <td><span class="error-count">0</span></td>
+        </tr>
+<tr class="rating-row rating-row--highlight">
+          <th scope="row"><span class="stars" aria-label="3 stars">★★★<span>★★</span></span></th>
+          <td><div class="count-cell"><strong>2</strong><span class="mini-bar"><i style="width:2.00%"></i></span></div></td>
+          <td><div class="accuracy-cell"><strong>50.00%</strong><span class="mini-bar mini-bar--accuracy"><i style="width:50.00%"></i></span></div></td>
+          <td><span class="error-count has-error">1</span></td>
+        </tr>
+<tr class="rating-row">
+          <th scope="row"><span class="stars" aria-label="4 stars">★★★★<span>★</span></span></th>
+          <td><div class="count-cell"><strong>2</strong><span class="mini-bar"><i style="width:2.00%"></i></span></div></td>
+          <td><div class="accuracy-cell"><strong>100.00%</strong><span class="mini-bar mini-bar--accuracy"><i style="width:100.00%"></i></span></div></td>
+          <td><span class="error-count">0</span></td>
+        </tr>
+<tr class="rating-row">
+          <th scope="row"><span class="stars" aria-label="5 stars">★★★★★<span></span></span></th>
+          <td><div class="count-cell"><strong>91</strong><span class="mini-bar"><i style="width:91.00%"></i></span></div></td>
+          <td><div class="accuracy-cell"><strong>98.90%</strong><span class="mini-bar mini-bar--accuracy"><i style="width:98.90%"></i></span></div></td>
+          <td><span class="error-count has-error">1</span></td>
+        </tr></tbody>
+        </table>
+        <p class="rating-footnote">Ratings of 4–5 map to POSITIVE; ratings below 4 map to NEGATIVE. The 3-star row is highlighted because one positively worded review conflicts with that rule.</p>
+      </article>
+    </section>
+
+    <section id="errors">
+      <div class="section-heading">
+        <div><span class="section-index">04 · Error analysis</span><h2>Two disagreements, both nuanced</h2></div>
+        <p>Both disagreements involve sentiment or labeling nuance rather than simple, unambiguous mistakes.</p>
+      </div>
+      <div class="error-summary" aria-label="Error type summary">
+        <div><span>Total errors</span><strong>2</strong></div>
+        <div><span>Text / rating nuance</span><strong>2</strong></div>
+        <div><span>Clear-cut polarity failures</span><strong>0</strong></div>
+      </div>
+      <div class="error-stack"><article class="error-card">
+          <div class="error-card__top">
+            <div><span class="row-number">Row 18</span>
+              <h3>No note attached to sent gift card</h3></div>
+            <span class="error-type">Nuanced disagreement</span>
+          </div>
+          <blockquote>What a pretty gift card presentation , the recipient loved it ! I have one complaint , I took the time and wrote a short note to the recipient of the gift card so she knew who and why the GC was being sent but the note wasn’t attached. I’ve used the option to write a note on many occasions and several times it showed up without the note . I actually had to contact her to ask if she had checked her mail knowing it had arrived .</blockquote>
+          <div class="label-comparison" aria-label="Sentiment comparison">
+            <div><span>Rating</span><strong>5 stars</strong></div>
+            <div><span>Rating-derived actual</span><strong class="pill pill--positive">POSITIVE</strong></div>
+            <div><span>Model prediction</span><strong class="pill pill--negative">NEGATIVE</strong></div>
+          </div>
+          <p class="error-explanation">The review opens with praise and carries a 5-star rating, but most of the text describes a recurring missing-note problem. The model appears to have weighted the substantial complaint more heavily than the reviewer’s overall positive judgment.</p>
+        </article>
+<article class="error-card">
+          <div class="error-card__top">
+            <div><span class="row-number">Row 99</span>
+              <h3>Easy to use</h3></div>
+            <span class="error-type">Label-rule mismatch</span>
+          </div>
+          <blockquote>Very easy to use. I wish I knew about it earlier</blockquote>
+          <div class="label-comparison" aria-label="Sentiment comparison">
+            <div><span>Rating</span><strong>3 stars</strong></div>
+            <div><span>Rating-derived actual</span><strong class="pill pill--negative">NEGATIVE</strong></div>
+            <div><span>Model prediction</span><strong class="pill pill--positive">POSITIVE</strong></div>
+          </div>
+          <p class="error-explanation">The wording is plainly positive: the reviewer calls the product very easy to use. The assignment rule nevertheless maps its 3-star rating to NEGATIVE, so the model’s POSITIVE prediction conflicts with the rating-derived label rather than with the language itself.</p>
+        </article></div>
+    </section>
+
+    <section id="explorer">
+      <div class="section-heading">
+        <div><span class="section-index">05 · Review explorer</span><h2>Inspect all 100 reviews</h2></div>
+        <p>Search titles or review text, combine filters, and expand any review to read its full text.</p>
+      </div>
+      <article class="panel explorer-shell">
+        <div class="filters" role="search">
+          <div class="control control--search"><label for="search">Search reviews</label><input id="search" type="search" placeholder="Search title or review text…" autocomplete="off"></div>
+          <div class="control"><label for="correct-filter">Result</label><select id="correct-filter"><option value="">All results</option><option value="true">Correct</option><option value="false">Incorrect</option></select></div>
+          <div class="control"><label for="actual-filter">Actual sentiment</label><select id="actual-filter"><option value="">All actual labels</option><option value="POSITIVE">POSITIVE</option><option value="NEGATIVE">NEGATIVE</option></select></div>
+          <div class="control"><label for="predicted-filter">Predicted sentiment</label><select id="predicted-filter"><option value="">All predictions</option><option value="POSITIVE">POSITIVE</option><option value="NEGATIVE">NEGATIVE</option></select></div>
+          <div class="control"><label for="rating-filter">Star rating</label><select id="rating-filter"><option value="">All ratings</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div>
+          <button class="clear-button" id="clear-filters" type="button">Clear</button>
+        </div>
+        <div class="table-status"><span id="result-count" aria-live="polite"><strong>100</strong> of 100 reviews</span><span>Full review text is embedded in this offline file.</span></div>
+        <div class="table-scroll">
+          <table class="review-table">
+            <caption>All evaluated reviews and their sentiment results</caption>
+            <thead><tr><th>Row</th><th>Rating</th><th>Title</th><th>Review text</th><th>Actual</th><th>Predicted</th><th>Result</th></tr></thead>
+            <tbody id="review-rows"></tbody>
+          </table>
+        </div>
+        <noscript><p class="empty-row">JavaScript is required to display and filter the embedded review table.</p></noscript>
+      </article>
+    </section>
+
+    <section id="takeaways">
+      <div class="section-heading">
+        <div><span class="section-index">06 · Interpretation</span><h2>What these results suggest</h2></div>
+        <p>Conclusions apply to this first 100-review evaluation and its rating-derived labels.</p>
+      </div>
+      <div class="takeaways">
+        <article class="panel takeaway-score"><div><span class="metric-label">Overall performance</span><strong>98%</strong></div><p>Very strong agreement across the 100 evaluated reviews.</p></article>
+        <article class="panel"><ul class="takeaway-list">
+          <li>The sample is highly imbalanced: 93 actual POSITIVE reviews versus 7 actual NEGATIVE reviews.</li>
+          <li>Balanced accuracy of 92.32% gives a more cautious view than the 98.00% raw accuracy because it weighs both classes equally.</li>
+          <li>The model performed strongly on both classes, with 98.92% POSITIVE recall and 85.71% NEGATIVE recall. The negative estimate is based on only seven examples.</li>
+          <li>Row 18 mixes a positive overall rating with a substantial complaint, creating a legitimate sentiment-interpretation challenge.</li>
+          <li>Row 99 uses positive language, but the assignment’s rule converts its 3-star rating to NEGATIVE. This is a label-rule mismatch rather than an obvious language failure.</li>
+        </ul></article>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="footer-inner"><span>MBAX 6418 · Amazon Gift Card Review Sentiment</span><span>Source: first 100 rows in predictions.csv</span></div></footer>
+
+  <script id="dashboard-data" type="application/json">[{"row_id":1,"title":"Great gift","text":"Having Amazon money is always good.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":2,"title":"amazon gift card","text":"Always the perfect gift.  I have never given one and had someone seem or act disappointed.  Just the opposite.  They are thrilled and excited to have a bit of a spree.  Always the perfect size and color!  Arrives in 1 day in most cases.  So it's never too late!  Lots of cards to chose from... thank you... birthday... wedding..baby..  and many that work for many occasions...","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":3,"title":"perfect gift","text":"When you have a person who is hard to shop for.. an amazon gift card is P E R F E C T.  Man or woman...  No matter what their hobby... lifestyle.. or age.  All you have to do is pick the $.  Don't forget to mention that it is a GIFT when you check out - you will have some gift card options.  I've ordered many of these over years.  They are always received with glee.  Woo hoo!  If you're looking for a great fit for me - this is just my size!  :)  Best to all!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":27},{"row_id":4,"title":"Nice looking","text":"The tin is a nice touch and pretty large.  It's about 4&#34; in diameter and about 1/2&#34; thick.  I added a pretty red ribbon and it is perfect.  Who doesn't love shopping on Amazon? Arrived quickly, I have Prime... but I think they ship the gift cards out SUPER fast... like over night. In case you need it for a FAST gift.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":5,"title":"Not $10 Gift Cards","text":"I bought this pack of Starbucks Gift cards in 2019. Ive given them to friends and I gave 2 to my daughter.\u003cbr />My daughter used one recently and it had $6.52 on the card not $10.00. She had the cashier check the balance of the other card and it had $5.32 on it! She had forgotten that she had these gift cards, so yes, 2 years later decided to use the when she found them! Do they decline in value? And then both had random amounts on them! I'm embarrassed now to have given them as gifts! Friends receiving the gift card aren't going to tell you that weren't able to cover their order with the card you gave them!!!","rating":1,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":true,"helpful_vote":2},{"row_id":6,"title":"Cute!","text":"That snowman tin is adorable","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":7,"title":"Easy gift","text":"Great and easy gift","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":8,"title":"Great gift","text":"Super cute nice quality tin\u003cbr />Your choose amount","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":9,"title":"Gifts for my two granddaughters","text":"They love it !!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":10,"title":"Great for saying “thank you” to the mail person, farrier, yard man,etc","text":"So many people\u003cbr />Make your life better so remember them!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":11,"title":"Convenient, safe, and perfect gift","text":"My grandson inlaw loves his gift cards, so it's the perfect gift for Christmas","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":2},{"row_id":12,"title":"Giftcard","text":"What can you say about a gift card? Well, it was valid. It's a good gift for someone who doesn't like to cook. Arrived promptly.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":13,"title":"Simple giftcard!","text":"Easy way to gift money for birthdays.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":14,"title":"Great giftcard","text":"Great gift for online shoppers!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":15,"title":"Easy..","text":"Reloading is easy. Shopping is easy. Amazon is easy.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":16,"title":"One Star","text":"Card did not work!!!!","rating":1,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":17,"title":"Great Product.","text":"I bought this for a Christmas gift.The recipient really liked it.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":18,"title":"No note attached to sent gift card","text":"What a pretty gift card presentation , the recipient loved it ! I have one complaint , I took the time and wrote a short note to the recipient of the gift card so she knew who and why the GC was being sent but the note wasn’t attached. I’ve used the option to write a note on many occasions and several times it showed up without the note . I actually had to contact her to ask if she had checked her mail knowing it had arrived .","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"NEGATIVE","correct":false,"verified_purchase":false,"helpful_vote":0},{"row_id":19,"title":"Gift card","text":"Perfect! Arrived just when stated!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":20,"title":"Good","text":"Good gift card","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":21,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":22,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":23,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":24,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":25,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":26,"title":"Good product","text":"Good product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":27,"title":"Good product","text":"Good product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":28,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":29,"title":"Good Product","text":"Good Product","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":30,"title":"Good","text":"Good","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":31,"title":"Gift card","text":"Perfect for Christmas","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":32,"title":"So easy","text":"Easy to do","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":33,"title":"Mistake","text":"Hit button by mistake n deduction from credit card on file","rating":2,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":34,"title":"Great gift idea","text":"Always great to order from my home. Amazon rocks!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":35,"title":"Secure","text":"So easy to use and recipients get to choose how to use it.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":36,"title":"Birthday surprise!","text":"This was a good birthday surprise!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":37,"title":"Birthday Gift","text":"Have given as Holiday, Birthday & Other Occasions remembrances. Always appreciated by the person receiving.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":38,"title":"Fun","text":"Awesome & they work","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":39,"title":"Reload is super easy.","text":"Really ready to reload gift cards.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":40,"title":"Convenience of giftabiliy.","text":"A great way to give a gift to family members in physical form. It was so convenient.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":41,"title":"Great Gift Package","text":"Nice gift packaging for any event","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":42,"title":"Grest Sandwitches !!","text":"Perfect and I even used Amazon Points - was mailed right out.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":43,"title":"GOOD PIZZA !!","text":"Perfect and I even used Amazon Points - was mailed right out.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":44,"title":"We like this Store and they stock Tons of different Items for all kinds of Pets","text":"Our cats love this place.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":45,"title":"Money was loaded on card","text":"Was cute and the money was loaded when it arrived","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":46,"title":"👍","text":"👍","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":47,"title":"Love it!!","text":"This is an online gift card nothing to show sorry🤪","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":48,"title":"Five Stars","text":"Gift cards are always a hit.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":49,"title":"So cool you can get a free tin with the gift ...","text":"So cool you can get a free tin with the gift card and it comes in 24 hours!! Super awesome. Last year I just printed off the gift cards which looked kind of cheap even though the cards were for substantial amounts. Highly recommend.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":50,"title":"Reccomend","text":"Really easy to load","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":51,"title":"Little sister surprise","text":"Same gift as her big sister's, this little one can choose the exact thing she most desires and run to the door for three days in anticipation.  A combined birthday and Christmas present for one who knows her own mind.  Good choice!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":52,"title":"The added value was great, but no more","text":"Purchasing an Amazon gift card came with an added monetary value but no more.\u003cbr />\u003cbr />A Bronx cheer for you!","rating":1,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":53,"title":"Perfect gift!","text":"This is near where I work and has a drive through.  Nothing better during these times to give than a gift of good food they can pick up with minimal contact. Gift cards are the way to go these days!","rating":4,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":54,"title":"Great staff appreciation gift!","text":"What better gift during these times than one to treat yourself.  This is a great gift I gave out to my staff and even those who don't read liked the idea of being able to listen to the audiobooks as well as there being content and other media through Audible.","rating":4,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":55,"title":"Cute cute cute!","text":"I love the tin! The gift cards can be ordered on different amounts.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":56,"title":"Five Stars","text":"Simple and easy.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":57,"title":"As described.","text":"Being able to reload the gift card is a time saver.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":58,"title":"Perfect gift for any occasion. Let them pick out what they love!","text":"I mean really, who wouldn't LOVE this?!?  Wonderful gift for any occasion.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":59,"title":"12 year old daughter loved this gift!","text":"Perfect gift for your kids!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":60,"title":"Easy to send to an Amazon shopper","text":"This is a simple gift to friends or family. For me it was easy to setup. Took ok only about 30 seconds. I also redeem Visa gifts by giving the gift card to myself. I like there isnt a fee. I do want Amazon to make some cooler cards with my animation when a receiver gets it.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":61,"title":"Rec'd promo from Amazon when reloading gift card.","text":"Bonus, rec'd a promo from Amazon for reloading gift card.  Yeah.\u003cbr />\u003cbr />Gift card was posted to my account quickly.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":62,"title":"Saves a Little Over time.","text":"Nice way to save a few bucks overtime by reloading your own gift card.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":63,"title":"What a great company","text":"Who wouldn't want an Amazon gift card?  The box foretold the contents, lol.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":64,"title":"A problem to use at drive thru's","text":"I only used the $50 card one time at Burger King. It was difficult to use. Must be run as credit, not as gift card. No remaining balance is given at the end of the transaction. And although it's on me, I misplaced or lost this card after only spending about $6 of it. I was hoping that the seller could provide me with the full card number so that I could at least use it online for other purchases. They failed to respond. I have the receipt from BK, but it only shows the last 4 numbers. There isn't a way of contacting happy cards customer service online that I could figure out. I wish I'd just stuck with credit cards. A lot safer.","rating":1,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":true,"helpful_vote":4},{"row_id":65,"title":"A gift card does make a great gift for a tweenager.","text":"We all know the kid who wants nothing. Or actually wants everything but nothing is good enough. YES,YES,the secret weapon. A AMAZON GIFT CARD!!  You pulled it off. You showed your love and you are the best and greatest. Happy Birthday to just because,You are the BEST!!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":66,"title":"Nice to have","text":"This comes in  very handy, and makes the guilt less","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":67,"title":"Excellent Gift","text":"Who would not like an Amazon Gift Card?  Makes everyone I give them, happy!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":68,"title":"Yay so easy!","text":"So easy! No scraping!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":69,"title":":)","text":"easy to use","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":70,"title":"10/10","text":"works great","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":71,"title":"Perfect for a birthday 🎂","text":"Another nice gift box from Amazon. With the world the way it is now I had to send a gift rather than going to a party. And Amazon has a good selection of gift boxes and fast shipping so my nephew was happy when he received the card in the mail.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":1},{"row_id":72,"title":"Perfect!","text":"Bought this for a gift and was very happy it shipped quickly and they received it just in time! Amazon is awesome! 🤩","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":73,"title":"Gift box nice!","text":"Love the gift box. So much j NB icee than just handing a gift card to the grandkids.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":74,"title":"It was soooo easy","text":"It was a nice way to give a present","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":75,"title":"great","text":"great buy","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":76,"title":"Amazon Thinks of Everything!","text":"GREAT idea!  I was so happy to have these on hand for the Holidays!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":77,"title":"Amazon lover giftee?  Buy it!","text":"So gift card for certain sum.  No service fee.  Lively metal gift box - yes..... I said metal.  What is not to love about this???!\u003cbr />\u003cbr />Well done Amazon.  Well done.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":8},{"row_id":78,"title":"Timing","text":"Great timing.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":79,"title":"Was easy to do","text":"Easy to use","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":80,"title":"PENGUINS","text":"So so cute!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":81,"title":"Believe this is the best gift to give !","text":"The recipient can choose what they want so the giver has less chance of a mistake.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":82,"title":"convenient","text":"A great and convenient gift idea-price is right too!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":false,"helpful_vote":0},{"row_id":83,"title":"Five Stars","text":"The gift card came in a pretty box.\u003cbr />Thanks Amozan.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":84,"title":"Best gift for someone you don’t know what to get","text":"This was for a gift","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":85,"title":"Great value","text":"Made my shopping much better good value","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":86,"title":"Sweet gift!","text":"I sent this to my brother and he couldn't stop talking about it. This boxes puts a little more nice into a gift. Very pretty!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":87,"title":"Amazing","text":"It can be used for a variety of things.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":1},{"row_id":88,"title":"Great Holder","text":"Great holder for gift cards","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":89,"title":"Gift card","text":"Makes these so easy for any holiday and especially stops buying something people do not like","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":90,"title":"Starbuck gift card","text":"My friend like the gift card like the sweater for holiday card","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":91,"title":"Good litte thank-you gifts","text":"I'm happy they did not cost me more than their face value to buy. I gave them out as a nice thank you to those who helped me with small things around my house. I sent them in the mail as a surprise, knowing money or gifts was not necessary. I recommend them.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":92,"title":"Okay as a gift","text":"After I bought several I realized I could have sent \"gift\" money via text without the fees or wait.","rating":3,"actual_sentiment":"NEGATIVE","predicted_sentiment":"NEGATIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":93,"title":"Good gift","text":"Those who already have everything, they can buy an audible book, an old rerun of a favorite movie, some little thing they may want, or whatever as a gift for any occasion. I recommend.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":94,"title":"So convenient.","text":"Arrived on time, in perfect shape, and best of all the person receiving the gift can buy whatever they want. One size fits all!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":95,"title":"Just what was ordered.","text":"Made holiday shopping easy!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":96,"title":"Can Do It From Home","text":"Usually I either receive an Amazon gift card as a birthday and/or Christmas gift or I purchase them at a store. Then it's very easy to add the amount to my gift card balance using my cell phone. Well I was stuck inside for several days due to a blizzard and I bought quite a few books then due to a travel ban I could not go to the store to purchase a gift card.\u003cbr />So after checking my Gift Card Balance I saw that I had overindulged and it needed to be topped up. One of the options under Manage Your Balance was to Reload Your Balance. I had never used this option but decided to try it. It was so easy to do and I didn't have to leave the comfort of my home. I will be using it again in the future.","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":17},{"row_id":97,"title":"Love it!","text":"Love my card!!","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":98,"title":"Easy to use","text":"It’s easy to use and very convenient. I would definitely consider refill more in the future","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0},{"row_id":99,"title":"Easy to use","text":"Very easy to use. I wish I knew about it earlier","rating":3,"actual_sentiment":"NEGATIVE","predicted_sentiment":"POSITIVE","correct":false,"verified_purchase":true,"helpful_vote":0},{"row_id":100,"title":"Perfect gift sent I a lovely container","text":"Sent in a lovely container","rating":5,"actual_sentiment":"POSITIVE","predicted_sentiment":"POSITIVE","correct":true,"verified_purchase":true,"helpful_vote":0}]</script>
+  <script>
+    (() => {
+      'use strict';
+      const reviews = JSON.parse(document.getElementById('dashboard-data').textContent);
+      const controls = {
+        search: document.getElementById('search'),
+        correct: document.getElementById('correct-filter'),
+        actual: document.getElementById('actual-filter'),
+        predicted: document.getElementById('predicted-filter'),
+        rating: document.getElementById('rating-filter')
+      };
+      const tbody = document.getElementById('review-rows');
+      const resultCount = document.getElementById('result-count');
+
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      })[character]);
+
+      const shorten = (text, limit = 115) => {
+        const clean = normalizeText(text).replace(/\s+/g, ' ').trim();
+        if (clean.length <= limit) return clean;
+        const slice = clean.slice(0, limit - 1);
+        return slice.slice(0, Math.max(slice.lastIndexOf(' '), limit - 18)) + '…';
+      };
+
+      const normalizeText = (text) => text
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/&#34;|&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&');
+
+      function filterReviews(filters) {
+        const query = (filters.search || '').trim().toLocaleLowerCase();
+        return reviews.filter(review => {
+          const matchesSearch = !query || `${review.title} ${review.text}`.toLocaleLowerCase().includes(query);
+          const matchesCorrect = filters.correct === '' || String(review.correct) === filters.correct;
+          const matchesActual = !filters.actual || review.actual_sentiment === filters.actual;
+          const matchesPredicted = !filters.predicted || review.predicted_sentiment === filters.predicted;
+          const matchesRating = !filters.rating || String(review.rating) === filters.rating;
+          return matchesSearch && matchesCorrect && matchesActual && matchesPredicted && matchesRating;
+        });
+      }
+
+      function currentFilters() {
+        return Object.fromEntries(Object.entries(controls).map(([key, control]) => [key, control.value]));
+      }
+
+      function render() {
+        const visible = filterReviews(currentFilters());
+        resultCount.innerHTML = `<strong>${visible.length}</strong> of ${reviews.length} reviews`;
+        if (!visible.length) {
+          tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No reviews match these filters.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = visible.map(review => {
+          const actualClass = review.actual_sentiment === 'POSITIVE' ? 'positive' : 'negative';
+          const predictedClass = review.predicted_sentiment === 'POSITIVE' ? 'positive' : 'negative';
+          return `<tr class="${review.correct ? '' : 'is-error'}">
+            <td class="numeric">${review.row_id}</td>
+            <td class="numeric"><span class="stars" aria-label="${review.rating} stars">${'★'.repeat(review.rating)}<span>${'★'.repeat(5-review.rating)}</span></span></td>
+            <td class="review-title">${escapeHtml(review.title)}</td>
+            <td class="review-text"><details><summary>${escapeHtml(shorten(review.text))}</summary><p>${escapeHtml(normalizeText(review.text))}</p></details></td>
+            <td><span class="pill pill--${actualClass}">${review.actual_sentiment}</span></td>
+            <td><span class="pill pill--${predictedClass}">${review.predicted_sentiment}</span></td>
+            <td><span class="pill pill--${review.correct ? 'correct' : 'incorrect'}">${review.correct ? 'Correct' : 'Incorrect'}</span></td>
+          </tr>`;
+        }).join('');
+      }
+
+      Object.values(controls).forEach(control => control.addEventListener('input', render));
+      document.getElementById('clear-filters').addEventListener('click', () => {
+        Object.values(controls).forEach(control => { control.value = ''; });
+        render();
+        controls.search.focus();
+      });
+
+      window.__dashboardTest = { reviews, filterReviews };
+      render();
+    })();
+  </script>
+</body>
+</html>

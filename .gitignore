@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.DS_Store
+
+# Source review corpus is large and externally supplied; keep the project code
+# and evaluated sample outputs in Git, and put the JSONL here locally.
+/data/*.jsonl
